@@ -1,0 +1,77 @@
+{
+  "DATA_PATH": "data/digisam/fulltext.sqlite3",
+  "EPOCH": 7,
+  "BATCH_SIZE": 256,
+  "MODELS": [
+    {
+      "name": "DC-SBB + CONLL + GERMEVAL",
+      "id": 1,
+      "model_dir": "data/konvens2019/build-wd_0.03/bert-all-german-de-finetuned",
+      "default": true
+    },
+    {
+      "name": "DC-SBB + CONLL + GERMEVAL + SBB",
+      "id": 2,
+      "model_dir": "data/konvens2019/build-on-all-german-de-finetuned/bert-sbb-de-finetuned",
+      "default": false
+    },
+    {
+      "name": "DC-SBB + SBB",
+      "id": 3,
+      "model_dir": "data/konvens2019/build-wd_0.03/bert-sbb-de-finetuned",
+      "default": false
+    },
+    {
+      "name": "CONLL + GERMEVAL",
+      "id": 4,
+      "model_dir": "data/konvens2019/build-wd_0.03/bert-all-german-baseline",
+      "default": false
+    }
+  ],
+  "PPN_EXAMPLES": [
+    {
+      "ppn": "633609536",
+      "name": "Der achtzehnte Brumaire des Louis Bonaparte"
+    },
+    {
+      "ppn": "778819027",
+      "name": "Der zerbrochene Krug"
+    },
+    {
+      "ppn": "71807789X",
+      "name": "Praktischer Kommentar zu den Gebühren-Taxen für Notare und Rechtsanwälte"
+    },
+    {
+      "ppn": "719153085",
+      "name": "Der Weltkrieg im Rechenunterricht"
+    },
+    {
+      "ppn": "719961289",
+      "name": "Das Kriegs-Schaubuch des XVIII. A.K."
+    },
+    {
+      "ppn": "720942748",
+      "name": "Ein Gebot der Stunde"
+    },
+    {
+      "ppn": "819155217",
+      "name": "Der Zirkel, 1883"
+    },
+    {
+      "ppn": "847022595",
+      "name": "Mecklenburgisches Logenblatt"
+    },
+    {
+      "ppn": "756689090",
+      "name": "Das Buch wunderbarer Erfindungen"
+    },
+    {
+      "ppn": "865468370",
+      "name": "Carl Robert Lessings Bücher- und Handschriftensammlung"
+    },
+    {
+      "ppn": "818985976",
+      "name": "\nDie älteste Berliner Zeitung\nOCR\n\nDie älteste Berliner Zeitung : Fragmente der Berliner Wochenzeitung von 1626 aus dem Besitz der Preußischen Staatsbibliothek"
+    }
+  ]
+}
