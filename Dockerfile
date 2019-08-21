@@ -17,4 +17,4 @@ COPY . /usr/src/qurator-mono-repo
 RUN pip3 --no-cache-dir install -e /usr/src/qurator-mono-repo
 
 WORKDIR /usr/src/qurator-mono-repo
-CMD export LANG=C.UTF-8; env FLASK_APP=qurator/qurator_sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=True flask run --host=0.0.0.0
+CMD export LANG=C.UTF-8; env FLASK_APP=qurator/sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=True flask run --host=0.0.0.0

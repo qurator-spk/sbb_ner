@@ -11,9 +11,12 @@ RUN apt-get update && \
 COPY requirements.txt /tmp
 RUN pip3 --no-cache-dir install -r /tmp/requirements.txt
 
-COPY . /usr/src/qurator-mono-repo
+COPY . /usr/src/qurator-sbb-ner
 
-RUN pip3 --no-cache-dir install -e /usr/src/qurator-mono-repo
+RUN mkdir -p /usr/src/qurator-sbb-ner/konvens2019
+RUN mkdir -p /usr/src/qurator-sbb-ner/digisam
 
-WORKDIR /usr/src/qurator-mono-repo
-CMD env FLASK_APP=qurator/qurator_sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=False flask run --host=0.0.0.0
+RUN pip3 --no-cache-dir install -e /usr/src/qurator-sbb-ner
+
+WORKDIR /usr/src/qurator-sbb-ner
+CMD env FLASK_APP=qurator/sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=False flask run --host=0.0.0.0

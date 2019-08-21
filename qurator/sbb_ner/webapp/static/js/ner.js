@@ -4,7 +4,7 @@ $(document).ready(function(){
     $('#nerform').submit(
         function(e){
             e.preventDefault();
-            load_ppn();
+            do_task();
         }
     );
 
@@ -23,19 +23,6 @@ $(document).ready(function(){
                         tmp += '<option value="' + item.id + '" ' + selected + ' >' + item.name + '</option>'
                     });
                     $('#model').html(tmp);
-                }
-            );
-
-    $.get( "/ppnexamples")
-        .done(
-            function( data ) {
-                var tmp="";
-                $.each(data,
-                    function(index, item){
-
-                        tmp += '<option value="' + item.ppn + '">' + item.name + '</option>'
-                    });
-                    $('#ppnexamples').html(tmp);
                 }
             );
 
@@ -58,9 +45,9 @@ function task_select() {
 }
 
 
-function load_ppn() {
+function do_task() {
 
-    var ppn = $('#ppn').val()
+    var input_text = $('#inputtext').val()
 
     var text_region_html =
         `<div class="card">
@@ -95,61 +82,102 @@ function load_ppn() {
     var task = $('#task').val();
     var model_id = $('#model').val();
 
-    console.log("Task: " + task);
-
-    if (task == 1) {
-        $("#resultregion").html(spinner_html);
-
-        $.get( "/digisam-fulltext/" + ppn)
-            .done(function( data ) {
-                $("#resultregion").html(text_region_html)
-                $("#textregion").html(data.text)
-            })
-            .fail(
-                function() {
-                    console.log('Failed.');
-                    $("#resultregion").html('Failed.');
-                });
-    }
-    else if (task == 2) {
-        $("#resultregion").html(spinner_html);
-
-        $.get( "/digisam-tokenized/" + ppn,
-            function( data ) {
-                $("#resultregion").html(text_region_html)
-                $("#textregion").html(data.text)
-            }).fail(
-            function() {
-                console.log('Failed.')
-                $("#resultregion").html('Failed.')
-            });
-    }
-    else if (task == 3) {
+//    if (task == 2) {
+//        $("#resultregion").html(spinner_html);
+//
+//        $.get( "/digisam-tokenized/" + ppn,
+//            function( data ) {
+//                $("#resultregion").html(text_region_html)
+//                $("#textregion").html(data.text)
+//            }).fail(
+//            function() {
+//                console.log('Failed.')
+//                $("#resultregion").html('Failed.')
+//            });
+//    }
+//    else
+//
+    if (task == 3) {
 
         $("#resultregion").html(spinner_html);
 
-        $.get( "/digisam-ner/" + model_id + "/" + ppn,
-            function( data ) {
-                $("#resultregion").html(text_region_html)
-                $("#textregion").html(data.text)
-                $("#legende").html(legende_html)
-            }).fail(
-            function(a,b,c) {
-                console.log('Failed.')
-                $("#resultregion").html('Failed.')
-            });
+        post_data = { "text" : input_text }
+
+        console.log(post_data)
+
+        $.ajax({
+            url:  "/ner/" + model_id,
+            data: JSON.stringify(post_data),
+            type: 'POST',
+            contentType: "application/json",
+            success:
+                function( data ) {
+                    text_html = ""
+                    data.forEach(
+                        function(sentence) {
+                            sentence.forEach(
+                                function(token) {
+
+                                     if (text_html != "") text_html += ' '
+
+                                     if (token.prediction == 'O')
+                                        text_html += token.word
+                                     else if (token.prediction.endsWith('PER'))
+                                        text_html += '<font color="red">' + token.word + '</font>'
+                                     else if (token.prediction.endsWith('LOC'))
+                                        text_html += '<font color="green">' + token.word + '</font>'
+                                     else if (token.prediction.endsWith('ORG'))
+                                        text_html += '<font color="blue">' + token.word + '</font>'
+                                })
+                             text_html += '<br/>'
+                        }
+                    )
+                    $("#resultregion").html(text_region_html)
+                    $("#textregion").html(text_html)
+                    $("#legende").html(legende_html)
+                }
+            ,
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+
+//        $.post( "/ner/" + model_id, post_data).done(
+//            function( data ) {
+//
+//                text_region_html = ""
+//                data.forEach(
+//                    function(sentence) {
+//                        sentence.forEach(
+//                            function(token) {
+//                                text_region_html += token.word + "(" + token.prediction + ") "
+//                            })
+//                    }
+//                )
+//
+//                $("#resultregion").html(text_region_html)
+//                $("#textregion").html(data.text)
+//                $("#legende").html(legende_html)
+//            }).fail(
+//            function(a,b,c) {
+//                console.log('Failed.')
+//                $("#resultregion").html('Failed.')
+//            });
      }
-     else if (task == 4) {
-        $("#resultregion").html(spinner_html);
-
-        $.get( "/digisam-ner-bert-tokens/" + model_id + "/" + ppn,
-            function( data ) {
-                $("#resultregion").html(text_region_html)
-                $("#textregion").html(data.text)
-            }).fail(
-            function(a,b,c) {
-                console.log('Failed.')
-                $("#resultregion").html('Failed.')
-            });
-     }
+//     else
+//
+//     if (task == 4) {
+//        $("#resultregion").html(spinner_html);
+//
+//        $.get( "/digisam-ner-bert-tokens/" + model_id + "/" + ppn,
+//            function( data ) {
+//                $("#resultregion").html(text_region_html)
+//                $("#textregion").html(data.text)
+//            }).fail(
+//            function(a,b,c) {
+//                console.log('Failed.')
+//                $("#resultregion").html('Failed.')
+//            });
+//     }
 }

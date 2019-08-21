@@ -1,0 +1,5 @@
+data/*
+*.egg_info
+venv
+models
+*.tar.gz

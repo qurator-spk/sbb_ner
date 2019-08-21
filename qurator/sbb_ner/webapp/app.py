@@ -317,12 +317,11 @@ def ner(model_id):
 
     output = []
 
-    word = None
-    last_prediction = 'O'
-
     for tokens, word_predictions in prediction:
 
+        word = None
         last_prediction = 'O'
+        output_sentence = []
 
         for token, word_pred in zip(tokens, word_predictions):
 
@@ -331,7 +330,7 @@ def ner(model_id):
 
             if not token.startswith('##'):
                 if word is not None:
-                    output.append({'word': word, 'prediction': last_prediction})
+                    output_sentence.append({'word': word, 'prediction': last_prediction})
 
                 word = ''
 
@@ -342,8 +341,10 @@ def ner(model_id):
             if word_pred != 'X':
                 last_prediction = word_pred
 
-    if word is not None and len(word) > 0:
-        output.append({'word': word, 'prediction': last_prediction})
+        if word is not None and len(word) > 0:
+            output_sentence.append({'word': word, 'prediction': last_prediction})
+
+        output.append(output_sentence)
 
     return jsonify(output)
 

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>NER - Demo </title>
+    <title>NER auf den digitalen Sammlungen</title>
     <script src="js/jquery-3.4.1.js"></script>
 </head>
 <body>
@@ -22,7 +22,7 @@
         <div class="col-10">
             <div class="row">
                 <div class="col-9 text-center">
-                    <h1>NER - Demo</h1>
+                    <h1>NER auf den digitalen Sammlungen</h1>
                 </div>
                 <div class="col">
                 </div>
@@ -35,6 +35,7 @@
                                 <div class="form-group row ml-2">
                                     <label for="task" class="col-sm-2 col-form-label">Task:</label>
                                     <select id="task" class="selectpicker col-md-auto" onchange="task_select()">
+                                        <option value="1">OCR-Text aus ALTO Datei</option>
                                         <option value="2">Wort- und Satztokenisierung</option>
                                         <option value="3" selected>Named Entity Recognition</option>
                                         <option value="4">BERT Tokens</option>
@@ -47,13 +48,10 @@
                                 </div>
 
                                 <div class="form-group row ml-2">
-                                    <label for="inputtext" class="col-sm-2 col-form-label">Input text:</label>
-                                    <!-- <input id="inputtext" class="col-sm-8" type="text" rows=10/> -->
-                                    <textarea id="inputtext" class=" col-sm-8 form-control" rows="3" required></textarea>
-                                </div>
-
-                                <div class="form-group row ml-2">
-                                    <div class="col-sm-2"></div>
+                                    <label for="ppn" class="col-sm-2 col-form-label">PPN:</label>
+                                    <input id="ppn" list="ppnexamples" class="col-sm-8" type="text"/>
+                                    <datalist id="ppnexamples">
+                                    </datalist>
                                     <button class="btn btn-primary" type="submit">Go</button>
                                 </div>
                             </form>
@@ -74,6 +72,6 @@
     </div>
 
 </div>
-<script src="js/ner.js"></script>
+<script src="js/ner-ds-sbb.js"></script>
 </body>
 </html>
