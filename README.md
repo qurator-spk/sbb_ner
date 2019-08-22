@@ -1,4 +1,5 @@
 
+![sbb-ner-demo example](.screenshots/sbb_ner_demo.png?raw=true)
 
 ***
 # Preprocessing of NER ground-truth:
