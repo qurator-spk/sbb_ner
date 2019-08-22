@@ -30,7 +30,7 @@ $(document).ready(function(){
 
                     if (url_params.has('text')) {
 
-                        var text = url_params.get('text')
+                        var text = decodeURIComponent(url_params.get('text'))
 
                         $('#inputtext').val(text);
 
@@ -51,6 +51,17 @@ function update() {
     var task = $('#task').val();
     var model_id = $('#model').val();
     var input_text = $('#inputtext').val()
+
+    if (input_text.length < 200) {
+
+        var url_params = new URLSearchParams(window.location.search);
+
+        url_params.set('text', encodeURIComponent(input_text))
+
+        window.history.replaceState({}, '', `${location.pathname}?${url_params}`);
+    }
+
+
 
     do_task(task, model_id, input_text);
 }
