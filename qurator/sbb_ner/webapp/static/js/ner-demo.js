@@ -4,11 +4,7 @@ $(document).ready(function(){
         function(e){
             e.preventDefault();
 
-            var task = $('#task').val();
-            var model_id = $('#model').val();
-            var input_text = $('#inputtext').val()
-
-            do_task(task, model_id, input_text);
+            update();
         }
     );
 
@@ -27,8 +23,34 @@ $(document).ready(function(){
                         tmp += '<option value="' + item.id + '" ' + selected + ' >' + item.name + '</option>'
                     });
                     $('#model').html(tmp);
+
+                    var url_params = new URLSearchParams(window.location.search);
+
+                    var do_update=false;
+
+                    if (url_params.has('text')) {
+
+                        var text = url_params.get('text')
+
+                        $('#inputtext').val(text);
+
+                        do_update = true;
+
+                        window.history.replaceState({}, '', `${location.pathname}`);
+                    }
+
+                    task_select()
+
+                    if (do_update) update();
                 }
             );
-
-    task_select()
 });
+
+function update() {
+
+    var task = $('#task').val();
+    var model_id = $('#model').val();
+    var input_text = $('#inputtext').val()
+
+    do_task(task, model_id, input_text);
+}
