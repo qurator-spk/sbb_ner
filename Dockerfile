@@ -12,7 +12,10 @@ RUN apt-get update && \
 COPY requirements.txt /tmp
 RUN pip3 --no-cache-dir install -r /tmp/requirements.txt
 
-COPY . /usr/src/qurator-mono-repo
+COPY . /usr/src/qurator-sbb-ner
+
+RUN mkdir -p /usr/src/qurator-sbb-ner/konvens2019
+RUN mkdir -p /usr/src/qurator-sbb-ner/digisam
 
 RUN pip3 --no-cache-dir install -e /usr/src/qurator-mono-repo
 
