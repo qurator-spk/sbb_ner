@@ -93,11 +93,15 @@ class NERPredictor:
         features = [convert_examples_to_features(ex, self._label_to_id, self._max_seq_length, self._bert_tokenizer)
                     for ex in examples]
 
+        assert len(sentences) == len(features)
+
         data_loader = NerProcessor.make_data_loader(None, self._batch_size, self._local_rank, self._label_to_id,
                                                     self._max_seq_length, self._bert_tokenizer, features=features,
                                                     sequential=True)
 
         prediction_tmp = model_predict(data_loader, self._device, self._label_map, self._model)
+
+        assert len(sentences) == len(prediction_tmp)
 
         prediction = []
         for fe, pr in zip(features, prediction_tmp):
@@ -185,125 +189,47 @@ def fulltext(ppn):
         if row_data.text is None:
             continue
 
-        text += html.escape(str(row_data.text)) + '<br><br><br>'
+        text += row_data.text + " "
 
     ret = {'text': text, 'ppn': ppn}
 
     return jsonify(ret)
 
 
-@app.route('/digisam-tokenized/<ppn>')
-def tokenized(ppn):
+@app.route('/tokenized', methods=['GET', 'POST'])
+def tokenized():
 
-    df = digisam.get(ppn)
+    raw_text = request.json['text']
 
-    if len(df) == 0:
-        return 'bad request!', 400
+    sentences = tokenizer.parse_text(raw_text)
 
-    text = ''
-    for row_index, row_data in df.iterrows():
+    result = [(sen, i) for i, (sen, _) in enumerate(sentences)]
 
-        if row_data.text is None:
-            continue
-
-        sentences = tokenizer.parse_text(row_data.text)
-
-        for sen, _ in sentences:
-
-            text += html.escape(str(sen)) + '<br>'
-
-        text += '<br><br><br>'
-
-    ret = {'text': text, 'ppn': ppn}
-
-    return jsonify(ret)
+    return jsonify(result)
 
 
-@app.route('/ner-bert-tokens/<model_id>/<ppn>')
-def ner_bert_tokens(model_id, ppn):
+@app.route('/ner-bert-tokens/<model_id>', methods=['GET', 'POST'])
+def ner_bert_tokens(model_id):
 
-    df = digisam.get(ppn)
+    raw_text = request.json['text']
 
-    if len(df) == 0:
-        return 'bad request!', 400
+    sentences = tokenizer.parse_text(raw_text)
 
-    text = ''
-    for row_index, row_data in df.iterrows():
+    prediction = predictor_store.get(model_id).classify_text(sentences)
 
-        if row_data.text is None:
-            continue
+    output = []
 
-        sentences = tokenizer.parse_text(row_data.text)
+    for tokens, word_predictions in prediction:
 
-        prediction = predictor_store.get(model_id).classify_text(sentences)
+        output_sentence = []
 
-        for tokens, word_predictions in prediction:
+        for token, word_pred in zip(tokens, word_predictions):
 
-            for token, word_pred in zip(tokens, word_predictions):
+            output_sentence.append({'token': html.escape(token), 'prediction': word_pred})
 
-                text += html.escape("{}({})".format(token, word_pred))
+        output.append(output_sentence)
 
-            text += '<br>'
-
-        text += '<br><br><br>'
-
-    ret = {'text': text, 'ppn': ppn}
-
-    return jsonify(ret)
-
-
-@app.route('/digisam-ner/<model_id>/<ppn>')
-def digisam_ner(model_id, ppn):
-
-    df = digisam.get(ppn)
-
-    if len(df) == 0:
-        return 'bad request!', 400
-
-    text = ''
-
-    for row_index, row_data in df.iterrows():
-
-        if row_data.text is None:
-            continue
-
-        sentences = tokenizer.parse_text(row_data.text)
-
-        prediction = predictor_store.get(model_id).classify_text(sentences)
-
-        for tokens, word_predictions in prediction:
-
-            last_prediction = 'O'
-
-            for token, word_pred in zip(tokens, word_predictions):
-
-                if token == '[UNK]':
-                    continue
-
-                if not token.startswith('##'):
-                    text += ' '
-
-                token = token[2:] if token.startswith('##') else token
-
-                if word_pred != 'X':
-                    last_prediction = word_pred
-
-                if last_prediction == 'O':
-                    text += html.escape(token)
-                elif last_prediction.endswith('PER'):
-                    text += '<font color="red">' + html.escape(token) + '</font>'
-                elif last_prediction.endswith('LOC'):
-                    text += '<font color="green">' + html.escape(token) + '</font>'
-                elif last_prediction.endswith('ORG'):
-                    text += '<font color="blue">' + html.escape(token) + '</font>'
-
-            text += '<br>'
-
-        text += '<br><br><br>'
-
-    ret = {'text': text, 'ppn': ppn}
-
-    return jsonify(ret)
+    return jsonify(output)
 
 
 @app.route('/ner/<model_id>', methods=['GET', 'POST'])

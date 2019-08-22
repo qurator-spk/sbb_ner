@@ -385,6 +385,8 @@ def model_predict(dataloader, device, label_map, model):
                     temp_2.pop()  # skip last token since its [SEP]
                     y_pred.append(temp_2)
                     break
+            else:
+                y_pred.append(temp_2)
 
     return y_pred
 

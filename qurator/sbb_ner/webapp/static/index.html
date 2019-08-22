@@ -35,9 +35,9 @@
                                 <div class="form-group row ml-2">
                                     <label for="task" class="col-sm-2 col-form-label">Task:</label>
                                     <select id="task" class="selectpicker col-md-auto" onchange="task_select()">
-                                        <option value="2">Wort- und Satztokenisierung</option>
-                                        <option value="3" selected>Named Entity Recognition</option>
-                                        <option value="4">BERT Tokens</option>
+                                        <option value="tokenize">Wort- und Satztokenisierung</option>
+                                        <option value="ner" selected>Named Entity Recognition</option>
+                                        <option value="bert-tokens">BERT Tokens</option>
                                     </select>
                                 </div>
                                 <div class="form-group row ml-2" id="model_select">
@@ -48,8 +48,7 @@
 
                                 <div class="form-group row ml-2">
                                     <label for="inputtext" class="col-sm-2 col-form-label">Input text:</label>
-                                    <!-- <input id="inputtext" class="col-sm-8" type="text" rows=10/> -->
-                                    <textarea id="inputtext" class=" col-sm-8 form-control" rows="3" required></textarea>
+                                    <textarea id="inputtext" class=" col-sm-8 form-control" rows="10" required></textarea>
                                 </div>
 
                                 <div class="form-group row ml-2">
@@ -75,5 +74,6 @@
 
 </div>
 <script src="js/ner.js"></script>
+<script src="js/ner-demo.js"></script>
 </body>
 </html>

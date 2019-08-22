@@ -1,39 +1,9 @@
 
-$(document).ready(function(){
-
-    $('#nerform').submit(
-        function(e){
-            e.preventDefault();
-            do_task();
-        }
-    );
-
-    $.get( "/models")
-        .done(
-            function( data ) {
-                var tmp="";
-                $.each(data,
-                    function(index, item){
-
-                        selected=""
-                        if (item.default) {
-                            selected = "selected"
-                        }
-
-                        tmp += '<option value="' + item.id + '" ' + selected + ' >' + item.name + '</option>'
-                    });
-                    $('#model').html(tmp);
-                }
-            );
-
-    task_select()
-});
-
 function task_select() {
 
     var task = $('#task').val();
 
-    if (task < 3) {
+    if ((task != "ner") && (task != "bert-tokens")){
         $('#model_select').hide()
     }
     else {
@@ -44,10 +14,9 @@ function task_select() {
     $("#legende").html("");
 }
 
+function do_task(task, model_id, input_text) {
 
-function do_task() {
-
-    var input_text = $('#inputtext').val()
+    var post_data = { "text" : input_text }
 
     var text_region_html =
         `<div class="card">
@@ -55,7 +24,7 @@ function do_task() {
                 Ergebnis:
             </div>
             <div class="card-block">
-                <div id="textregion" style="overflow-y:scroll;height: 65vh;"></div>
+                <div id="textregion" style="overflow-y:scroll;height: 55vh;"></div>
             </div>
         </div>`;
 
@@ -79,31 +48,45 @@ function do_task() {
 
     $("#legende").html("");
 
-    var task = $('#task').val();
-    var model_id = $('#model').val();
+    if (task == "fulltext") {
+        $("#resultregion").html(text_region_html)
+        $("#textregion").html(input_text)
+    }
+    else if (task == "tokenize") {
 
-//    if (task == 2) {
-//        $("#resultregion").html(spinner_html);
-//
-//        $.get( "/digisam-tokenized/" + ppn,
-//            function( data ) {
-//                $("#resultregion").html(text_region_html)
-//                $("#textregion").html(data.text)
-//            }).fail(
-//            function() {
-//                console.log('Failed.')
-//                $("#resultregion").html('Failed.')
-//            });
-//    }
-//    else
-//
-    if (task == 3) {
+        $("#resultregion").html(spinner_html)
 
-        $("#resultregion").html(spinner_html);
+        $.ajax(
+            {
+            url:  "/tokenized",
+            data: JSON.stringify(post_data),
+            type: 'POST',
+            contentType: "application/json",
+            success:
+                function( data ) {
+                    text_html = ""
+                    data.forEach(
+                        function(sentence) {
 
-        post_data = { "text" : input_text }
+                            text_html += JSON.stringify(sentence)
 
-        console.log(post_data)
+                            text_html += '<br/>'
+                        }
+                    )
+                    $("#resultregion").html(text_region_html)
+                    $("#textregion").html(text_html)
+                    $("#legende").html(legende_html)
+                }
+            ,
+            error:
+                function(error) {
+                    console.log(error);
+                }
+            })
+    }
+    else if (task == "ner") {
+
+        $("#resultregion").html(spinner_html)
 
         $.ajax({
             url:  "/ner/" + model_id,
@@ -141,43 +124,40 @@ function do_task() {
                 console.log(error);
             }
         });
-
-
-//        $.post( "/ner/" + model_id, post_data).done(
-//            function( data ) {
-//
-//                text_region_html = ""
-//                data.forEach(
-//                    function(sentence) {
-//                        sentence.forEach(
-//                            function(token) {
-//                                text_region_html += token.word + "(" + token.prediction + ") "
-//                            })
-//                    }
-//                )
-//
-//                $("#resultregion").html(text_region_html)
-//                $("#textregion").html(data.text)
-//                $("#legende").html(legende_html)
-//            }).fail(
-//            function(a,b,c) {
-//                console.log('Failed.')
-//                $("#resultregion").html('Failed.')
-//            });
      }
-//     else
-//
-//     if (task == 4) {
-//        $("#resultregion").html(spinner_html);
-//
-//        $.get( "/digisam-ner-bert-tokens/" + model_id + "/" + ppn,
-//            function( data ) {
-//                $("#resultregion").html(text_region_html)
-//                $("#textregion").html(data.text)
-//            }).fail(
-//            function(a,b,c) {
-//                console.log('Failed.')
-//                $("#resultregion").html('Failed.')
-//            });
-//     }
+     else if (task == "bert-tokens") {
+        $("#resultregion").html(spinner_html);
+
+        $.ajax(
+            {
+            url:  "/ner-bert-tokens/" + model_id,
+            data: JSON.stringify(post_data),
+            type: 'POST',
+            contentType: "application/json",
+            success:
+                function( data ) {
+                    text_html = ""
+                    data.forEach(
+                        function(sentence) {
+                            sentence.forEach(
+                                function(part) {
+
+                                     if (text_html != "") text_html += ' '
+
+                                     text_html += part.token + "(" + part.prediction + ")"
+                                })
+                             text_html += '<br/>'
+                        }
+                    )
+                    $("#resultregion").html(text_region_html)
+                    $("#textregion").html(text_html)
+                    $("#legende").html(legende_html)
+                }
+            ,
+            error:
+                function(error) {
+                    console.log(error);
+                }
+            })
+     }
 }
