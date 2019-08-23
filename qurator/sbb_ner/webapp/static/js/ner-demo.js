@@ -52,13 +52,16 @@ function update() {
     var model_id = $('#model').val();
     var input_text = $('#inputtext').val()
 
-    if (input_text.length < 200) {
+    if (input_text.length < 30000) {
 
         var url_params = new URLSearchParams(window.location.search);
 
         url_params.set('text', encodeURIComponent(input_text))
 
         window.history.replaceState({}, '', `${location.pathname}?${url_params}`);
+    }
+    else {
+        window.history.replaceState({}, '', `${location.pathname}`);
     }
 
 
