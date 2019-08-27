@@ -1,9 +1,9 @@
-
 ![sbb-ner-demo example](.screenshots/sbb_ner_demo.png?raw=true)
 
 How the models have been obtained: http://area.staatsbibliothek-berlin.de/sbb-upload/qurator/sbb_ner/konvens2019.pdf .
 
 ***
+
 #Installation:
 
 Setup virtual environment:
