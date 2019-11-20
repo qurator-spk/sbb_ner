@@ -76,7 +76,7 @@ $(BERT_MODEL_PATH)/pytorch_model.bin:	$(BERT_MODEL_PATH)/bert_model.ckpt.index
 	pytorch_pretrained_bert convert_tf_checkpoint_to_pytorch $(BERT_MODEL_PATH)/bert_model.ckpt $(BERT_MODEL_PATH)/bert_config.json $(BERT_MODEL_PATH)/pytorch_model.bin
 
 $(DIGISAM_PATH)/de_corpus.txt:
-	altocsv2corpus $(DIGISAM_PATH)/xml2csv_alto.csv $(DIGISAM_PATH)/selection_de.pkl $(DIGISAM_PATH)/de_corpus.txt --chunksize=10000
+	altocsv2corpus $(DIGISAM_PATH)/fulltext.sqlite3 $(DIGISAM_PATH)/selection_de.pkl $(DIGISAM_PATH)/de_corpus.txt --chunksize=10000
 
 $(BERT_MODEL_PATH)/epoch_0.json: $(DIGISAM_PATH)/de_corpus.txt $(BERT_MODEL_PATH)/pytorch_model.bin
 	bert-pregenerate-trainingdata --train_corpus $(DIGISAM_PATH)/de_corpus.txt --output_dir $(BERT_MODEL_PATH) --bert_model $(BERT_MODEL_PATH) --reduce_memory --epochs $(EPOCHS)
