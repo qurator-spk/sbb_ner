@@ -262,16 +262,17 @@ def ner(model_id):
 
         for pos, (token, word_pred) in enumerate(zip(tokens, word_predictions)):
 
-            if not token.startswith('##'):
+            if not token.startswith('##') and token != '[UNK]':
                 if len(word) > 0:
-                    output_sentence.append({'word': word, 'prediction': last_prediction})
+                    output_sentence.append({'word': word, 'prediction': last_prediction} )
 
                 word = ''
 
             if token == '[UNK]':
-                orig_pos = len("".join([pred['word'] for pred in output_sentence]))
+                orig_pos = len("".join([pred['word'] for pred in output_sentence]) + word)
 
-                output_sentence.append({'word': original_text[orig_pos], 'prediction': last_prediction})
+                word += original_text[orig_pos]
+
                 continue
 
             token = token[2:] if token.startswith('##') else token
