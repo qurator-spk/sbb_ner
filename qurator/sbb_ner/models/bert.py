@@ -17,7 +17,8 @@ from pytorch_pretrained_bert.modeling import (CONFIG_NAME,  # WEIGHTS_NAME,
                                               BertConfig,
                                               BertForTokenClassification)
 from pytorch_pretrained_bert.optimization import BertAdam, WarmupLinearSchedule
-from pytorch_pretrained_bert.tokenization import BertTokenizer
+# from pytorch_pretrained_bert.tokenization import BertTokenizer
+from .tokenization import BertTokenizer
 
 
 from conlleval import evaluate as conll_eval
@@ -386,6 +387,7 @@ def model_predict(dataloader, device, label_map, model):
                     y_pred.append(temp_2)
                     break
             else:
+                temp_2.pop()  # skip last token since its [SEP]
                 y_pred.append(temp_2)
 
     return y_pred

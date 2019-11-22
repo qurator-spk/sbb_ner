@@ -10,7 +10,7 @@ from somajo import Tokenizer, SentenceSplitter
 
 from qurator.sbb_ner.models.bert import get_device, model_predict
 from qurator.sbb_ner.ground_truth.data_processor import NerProcessor, convert_examples_to_features
-from pytorch_pretrained_bert.tokenization import BertTokenizer
+from qurator.sbb_ner.models.tokenization import BertTokenizer
 from pytorch_pretrained_bert.modeling import (CONFIG_NAME,
                                               BertConfig,
                                               BertForTokenClassification)
@@ -90,10 +90,8 @@ class NERPredictor:
 
         examples = NerProcessor.create_examples(sentences, 'test')
 
-        features = [convert_examples_to_features(ex, self._label_to_id, self._max_seq_length, self._bert_tokenizer)
-                    for ex in examples]
-
-        assert len(sentences) == len(features)
+        features = [fe for ex in examples for fe in
+                    convert_examples_to_features(ex, self._label_to_id, self._max_seq_length, self._bert_tokenizer)]
 
         data_loader = NerProcessor.make_data_loader(None, self._batch_size, self._local_rank, self._label_to_id,
                                                     self._max_seq_length, self._bert_tokenizer, features=features,
@@ -101,11 +99,22 @@ class NERPredictor:
 
         prediction_tmp = model_predict(data_loader, self._device, self._label_map, self._model)
 
-        assert len(sentences) == len(prediction_tmp)
+        assert len(prediction_tmp) == len(features)
 
         prediction = []
+        prev_guid = None
         for fe, pr in zip(features, prediction_tmp):
-            prediction.append((fe.tokens[1:-1], pr))
+            # longer sentences might have been processed in several steps
+            # therefore we have to glue them together. This can be done on the basis of the guid.
+
+            if prev_guid != fe.guid:
+                prediction.append((fe.tokens[1:-1], pr))
+            else:
+                prediction[-1] = (prediction[-1][0] + fe.tokens[1:-1], prediction[-1][1] + pr)
+
+            prev_guid = fe.guid
+
+        assert len(sentences) == len(prediction)
 
         return prediction
 
@@ -243,22 +252,27 @@ def ner(model_id):
 
     output = []
 
-    for tokens, word_predictions in prediction:
+    for (tokens, word_predictions),  (input_sentence, _) in zip(prediction, sentences):
 
-        word = None
+        original_text = "".join(input_sentence)
+
+        word = ''
         last_prediction = 'O'
         output_sentence = []
 
-        for token, word_pred in zip(tokens, word_predictions):
-
-            if token == '[UNK]':
-                continue
+        for pos, (token, word_pred) in enumerate(zip(tokens, word_predictions)):
 
             if not token.startswith('##'):
-                if word is not None:
+                if len(word) > 0:
                     output_sentence.append({'word': word, 'prediction': last_prediction})
 
                 word = ''
+
+            if token == '[UNK]':
+                orig_pos = len("".join([pred['word'] for pred in output_sentence]))
+
+                output_sentence.append({'word': original_text[orig_pos], 'prediction': 'O'})
+                continue
 
             token = token[2:] if token.startswith('##') else token
 
@@ -267,10 +281,17 @@ def ner(model_id):
             if word_pred != 'X':
                 last_prediction = word_pred
 
-        if word is not None and len(word) > 0:
+        if len(word) > 0:
             output_sentence.append({'word': word, 'prediction': last_prediction})
 
         output.append(output_sentence)
+
+    for output_sentence, (input_sentence, _) in zip(output, sentences):
+
+        try:
+            assert "".join([pred['word'] for pred in output_sentence]) == "".join(input_sentence).replace(" ", "")
+        except AssertionError:
+            import ipdb;ipdb.set_trace()
 
     return jsonify(output)
 

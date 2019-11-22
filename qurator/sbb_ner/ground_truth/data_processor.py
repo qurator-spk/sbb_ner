@@ -37,7 +37,8 @@ class InputExample(object):
 class InputFeatures(object):
     """A single set of features of data."""
 
-    def __init__(self, input_ids, input_mask, segment_ids, label_id, tokens):
+    def __init__(self, guid, input_ids, input_mask, segment_ids, label_id, tokens):
+        self.guid = guid
         self.input_ids = input_ids
         self.input_mask = input_mask
         self.segment_ids = segment_ids
@@ -74,6 +75,8 @@ class WikipediaDataset(Dataset):
         # noinspection PyUnresolvedReferences
         self._random_state = np.random.RandomState(seed=self._seed)
 
+        self._features = []
+
         self._reset()
 
         return
@@ -85,9 +88,8 @@ class WikipediaDataset(Dataset):
 
         return int(self._counter) % int(1.0 / self._no_entity_fraction) != 0
 
-    def __getitem__(self, index):
+    def _get_features(self):
 
-        del index
         if self._counter > self._data_epochs * self._epoch_size:
             self._reset()
 
@@ -113,14 +115,24 @@ class WikipediaDataset(Dataset):
         sample = InputExample(guid="%s-%s" % (self._set_file, self._counter),
                               text_a=sen_words, text_b=None, label=sen_tags)
 
-        features = convert_examples_to_features(sample, self._label_map, self._max_seq_length, self._tokenizer)
+        return [fe for fe in
+                convert_examples_to_features(sample, self._label_map, self._max_seq_length, self._tokenizer)]
+
+    def __getitem__(self, index):
+
+        del index
+
+        if len(self._features) == 0:
+            self._features = self._get_features()
+
+        fe = self._features.pop()
 
         self._counter += 1
 
-        return torch.tensor(features.input_ids, dtype=torch.long), \
-               torch.tensor(features.input_mask, dtype=torch.long), \
-               torch.tensor(features.segment_ids, dtype=torch.long), \
-               torch.tensor(features.label_id, dtype=torch.long)
+        return torch.tensor(fe.input_ids, dtype=torch.long), \
+               torch.tensor(fe.input_mask, dtype=torch.long), \
+               torch.tensor(fe.segment_ids, dtype=torch.long), \
+               torch.tensor(fe.label_id, dtype=torch.long)
 
     def __len__(self):
 
@@ -324,8 +336,8 @@ class NerProcessor(DataProcessor):
                          sequential=False):
 
         if features is None:
-            features = [convert_examples_to_features(ex, label_map, max_seq_length, tokenizer)
-                        for ex in examples]
+            features = [fe for ex in examples for fe in
+                        convert_examples_to_features(ex, label_map, max_seq_length, tokenizer)]
 
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
@@ -362,74 +374,59 @@ class NerProcessor(DataProcessor):
         return data
 
 
-def convert_examples_to_features(example, label_map, max_seq_length, tokenizer):
+def convert_examples_to_features(example, label_map, max_seq_len, tokenizer):
     """
     :param example: instance of InputExample
-    :param label_map:
-    :param max_seq_length:
-    :param tokenizer:
+    :param label_map: Maps labels like B-ORG ... to numbers (ids).
+    :param max_seq_len: Maximum length of sequences to be delivered to the model.
+    :param tokenizer: BERT-Tokenizer
     :return:
     """
-
-    words = example.text_a
-    word_labels = example.label
     tokens = []
     labels = []
 
-    for i, word in enumerate(words):
+    for i, word in enumerate(example.text_a):  # example.text_a is a sequence of words
 
         token = tokenizer.tokenize(word)
         tokens.extend(token)
 
-        label_1 = word_labels[i] if i < len(word_labels) else 'O'
+        label_1 = example.label[i] if i < len(example.label) else 'O'
 
-        for m in range(len(token)):
+        for m in range(len(token)):  # a word might have been split into several tokens
             if m == 0:
                 labels.append(label_1)
             else:
                 labels.append("X")
 
-    if len(tokens) >= max_seq_length - 1:
-        tokens = tokens[0:(max_seq_length - 2)]
-        labels = labels[0:(max_seq_length - 2)]
+    start_pos = 0
+    while start_pos < len(tokens):
 
-    n_tokens = []
-    segment_ids = []
-    label_ids = []
-    n_tokens.append("[CLS]")
-    segment_ids.append(0)
-    label_ids.append(label_map["[CLS]"])
-    for i, token in enumerate(tokens):
-        n_tokens.append(token)
-        segment_ids.append(0)
-        label_ids.append(label_map[labels[i]])
-    n_tokens.append("[SEP]")
-    segment_ids.append(0)
-    label_ids.append(label_map["[SEP]"])
-    input_ids = tokenizer.convert_tokens_to_ids(n_tokens)
-    input_mask = [1] * len(input_ids)
+        window_len = min(max_seq_len - 2, len(tokens) - start_pos)  # -2 since we also need [CLS] and [SEP]
 
-    while len(input_ids) < max_seq_length:
-        input_ids.append(0)
-        input_mask.append(0)
-        segment_ids.append(0)
-        label_ids.append(0)
+        # Make sure that we do not split the sentence within a word.
+        while window_len > 1 and start_pos + window_len < len(tokens) and\
+                tokens[start_pos + window_len].startswith('##'):
+            window_len -= 1
 
-    assert len(input_ids) == max_seq_length
-    assert len(input_mask) == max_seq_length
-    assert len(segment_ids) == max_seq_length
-    assert len(label_ids) == max_seq_length
+        token_window = tokens[start_pos:start_pos+window_len]
+        start_pos += window_len
 
-    # if ex_index < 5:
-    #     logger.info("*** Example ***")
-    #     logger.info("guid: %s" % example.guid)
-    #     logger.info("tokens: %s" % " ".join(
-    #         [str(x) for x in tokens]))
-    #     logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-    #     logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-    #     logger.info(
-    #         "segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-    #     logger.info("label: %s (id = %d)" % (example.label, label_ids))
+        augmented_tokens = ["[CLS]"] + token_window + ["[SEP]"]
 
-    return InputFeatures(input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids, label_id=label_ids,
-                         tokens=n_tokens)
+        input_ids = tokenizer.convert_tokens_to_ids(augmented_tokens) + max(0, max_seq_len - len(augmented_tokens))*[0]
+
+        input_mask = [1] * len(augmented_tokens) + max(0, max_seq_len - len(augmented_tokens))*[0]
+
+        segment_ids = [0] + len(token_window) * [0] + [0] + max(0, max_seq_len - len(augmented_tokens))*[0]
+
+        label_ids = [label_map["[CLS]"]] + [label_map[labels[i]] for i in range(len(token_window))] + \
+                    [label_map["[SEP]"]] + max(0, max_seq_len - len(augmented_tokens)) * [0]
+
+        assert len(input_ids) == max_seq_len
+        assert len(input_mask) == max_seq_len
+        assert len(segment_ids) == max_seq_len
+        assert len(label_ids) == max_seq_len
+
+        yield InputFeatures(guid=example.guid, input_ids=input_ids, input_mask=input_mask, segment_ids=segment_ids,
+                            label_id=label_ids, tokens=augmented_tokens)
+
