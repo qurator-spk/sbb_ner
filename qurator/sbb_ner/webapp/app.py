@@ -271,7 +271,7 @@ def ner(model_id):
             if token == '[UNK]':
                 orig_pos = len("".join([pred['word'] for pred in output_sentence]))
 
-                output_sentence.append({'word': original_text[orig_pos], 'prediction': 'O'})
+                output_sentence.append({'word': original_text[orig_pos], 'prediction': last_prediction})
                 continue
 
             token = token[2:] if token.startswith('##') else token
