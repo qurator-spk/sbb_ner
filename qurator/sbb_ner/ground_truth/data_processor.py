@@ -408,6 +408,9 @@ def convert_examples_to_features(example, label_map, max_seq_len, tokenizer):
                 tokens[start_pos + window_len].startswith('##'):
             window_len -= 1
 
+        if window_len == 1:
+            window_len = min(max_seq_len - 2, len(tokens) - start_pos)
+
         token_window = tokens[start_pos:start_pos+window_len]
         start_pos += window_len
 

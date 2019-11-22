@@ -344,9 +344,9 @@ class WordpieceTokenizer(object):
         output_tokens = []
         for token in whitespace_tokenize(text):
             chars = list(token)
-            if len(chars) > self.max_input_chars_per_word:
-                output_tokens.append(self.unk_token)
-                continue
+            # if len(chars) > self.max_input_chars_per_word:
+            #     output_tokens.append(self.unk_token)
+            #     continue
 
             # is_bad = False
             start = 0
