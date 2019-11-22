@@ -1,6 +1,6 @@
 ![sbb-ner-demo example](.screenshots/sbb_ner_demo.png?raw=true)
 
-How the models have been obtained: http://area.staatsbibliothek-berlin.de/sbb-upload/qurator/sbb_ner/konvens2019.pdf .
+How the models have been obtained: https://file.spk-berlin.de:8443/sbb_ner/konvens2019.pdf .
 
 ***
 
@@ -26,7 +26,7 @@ Install package together with its dependencies in development mode:
 pip install -e ./
 ```
 
-Download required models: http://area.staatsbibliothek-berlin.de/sbb-upload/qurator/sbb_ner/models.tar.gz 
+Download required models: https://file.spk-berlin.de:8443/sbb_ner/models.tar.gz 
 
 Extract model archive:
 ```
