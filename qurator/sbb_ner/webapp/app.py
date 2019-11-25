@@ -254,7 +254,7 @@ def ner(model_id):
 
     for (tokens, word_predictions),  (input_sentence, _) in zip(prediction, sentences):
 
-        original_text = "".join(input_sentence)
+        original_text = "".join(input_sentence).replace(" ", "")
 
         word = ''
         last_prediction = 'O'
