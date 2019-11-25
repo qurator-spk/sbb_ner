@@ -41,6 +41,12 @@ env FLASK_APP=qurator/sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CU
 
 Set USE_CUDA=False, if you do not have a GPU available/installed.
 
+
+For production purposes rather use
+```
+gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
+```
+
 # Docker
 
 ## CPU-only:
