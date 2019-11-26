@@ -1,4 +1,5 @@
 import os
+import logging
 from flask import Flask, send_from_directory, redirect, jsonify, request
 import pandas as pd
 from sqlite3 import Error
@@ -19,6 +20,8 @@ app = Flask(__name__)
 
 app.config.from_json('config.json')
 
+logger = logging.getLogger(__name__)
+
 
 class Digisam:
 
@@ -31,13 +34,15 @@ class Digisam:
     @staticmethod
     def create_connection(db_file):
         try:
+            logger.debug('Connection to database: {}'.format(db_file))
+
             conn = sqlite3.connect(db_file, check_same_thread=False)
 
             conn.execute('pragma journal_mode=wal')
 
             return conn
         except Error as e:
-            print(e)
+            logger.error(e)
 
         return None
 
@@ -264,7 +269,7 @@ def ner(model_id):
 
             if not token.startswith('##') and token != '[UNK]':
                 if len(word) > 0:
-                    output_sentence.append({'word': word, 'prediction': last_prediction} )
+                    output_sentence.append({'word': word, 'prediction': last_prediction})
 
                 word = ''
 
@@ -292,7 +297,9 @@ def ner(model_id):
         try:
             assert "".join([pred['word'] for pred in output_sentence]) == "".join(input_sentence).replace(" ", "")
         except AssertionError:
-            import ipdb;ipdb.set_trace()
+            logger.warning('Input and output different!!! \n\n\nInput: {}\n\nOutput: {}\n'.
+                           format("".join(input_sentence).replace(" ", ""),
+                                  "".join([pred['word'] for pred in output_sentence])))
 
     return jsonify(output)
 
