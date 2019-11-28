@@ -24,6 +24,7 @@ setup(
         "compile_germ_eval=qurator.sbb_ner.ground_truth.germeval:main",
         "compile_conll=qurator.sbb_ner.ground_truth.conll:main",
         "compile_wikiner=qurator.sbb_ner.ground_truth.wikiner:main",
+        "join-gt=qurator.sbb_ner.ground_truth.join_gt:main",
         "bert-ner=qurator.sbb_ner.models.bert:main"
       ]
     },

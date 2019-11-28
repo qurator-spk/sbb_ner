@@ -110,7 +110,7 @@ $(BUILD_PATH)/wikiner.pkl: $(NER_DATA_PATH)/wikiner
 	compile_wikiner $(NER_DATA_PATH)/wikiner $(BUILD_PATH)/wikiner.pkl
 
 $(BUILD_PATH)/gt.pkl:
-	python qurator/ner/join_gt.py $(BUILD_PATH)/germ_eval.pkl $(BUILD_PATH)/europeana_historic.pkl $(BUILD_PATH)/conll2003.pkl $(BUILD_PATH)/wikiner.pkl $(BUILD_PATH)/gt.pkl
+	join-gt $(BUILD_PATH)/germ_eval.pkl $(BUILD_PATH)/europeana_historic.pkl $(BUILD_PATH)/conll2003.pkl $(BUILD_PATH)/wikiner.pkl $(BUILD_PATH)/gt.pkl
 
 ner-ground-truth: dirs $(BUILD_PATH)/europeana_historic.pkl $(BUILD_PATH)/germ_eval.pkl $(BUILD_PATH)/conll2003.pkl $(BUILD_PATH)/wikiner.pkl $(BUILD_PATH)/gt.pkl
 
@@ -199,7 +199,7 @@ $(BUILD_PATH)/bert-all-german-de-finetuned/$(EPOCH_FILE):
 	bert-ner --train_sets='GERM-EVAL-TRAIN|DE-CONLL-TRAIN' --dev_sets='GERM-EVAL-DEV|DE-CONLL-TESTA' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
 $(BUILD_PATH)/bert-complete-de-finetuned/$(EPOCH_FILE):
-	bert-ner --train_sets='GERM-EVAL-TRAIN|DE-CONLL-TRAIN|SBB|ONB|LFT|DE-CONLL-TESTA|DE-CONLL-TESTB|GERM-EVAL-TEST' --dev_sets='GERM-EVAL-DEV|DE-CONLL-TESTA' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
+	bert-ner --train_sets='GERM-EVAL-TRAIN|DE-CONLL-TRAIN|SBB|ONB|LFT|DE-CONLL-TESTA|DE-CONLL-TESTB|GERM-EVAL-TEST' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
 
 
@@ -226,7 +226,7 @@ $(BUILD_PATH)/bert-onb-lft-de-finetuned/$(EPOCH_FILE):
 	bert-ner --train_sets='ONB|LFT' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
 
-bert-%-de-finetuned: $(BUILD_PATH)/bert-%-de-finetuned/$(EPOCH_FILE) $(BUILD_PATH)/bert-%-de-finetuned/vocab.txt $(BUILD_PATH)/bert-%-de-finetuned/bert_config.json $(BUILD_PATH)/bert-%-de-finetuned/$(MODEL_FILE) ;
+bert-%-de-finetuned: ner-ground-truth $(BUILD_PATH)/bert-%-de-finetuned/$(EPOCH_FILE) $(BUILD_PATH)/bert-%-de-finetuned/vocab.txt $(BUILD_PATH)/bert-%-de-finetuned/bert_config.json $(BUILD_PATH)/bert-%-de-finetuned/$(MODEL_FILE) ;
 
 bert-finetuned: dirs ner-ground-truth bert-conll2003-de-finetuned bert-germ-eval-de-finetuned bert-all-german-de-finetuned bert-wikiner-de-finetuned bert-lft-de-finetuned bert-onb-de-finetuned bert-sbb-de-finetuned bert-lft-sbb-de-finetuned bert-onb-sbb-de-finetuned bert-onb-lft-de-finetuned
 
