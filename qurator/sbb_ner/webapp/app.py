@@ -139,6 +139,9 @@ class NERTokenizer:
 
         sentences = []
         for sen in sentences_tokenized:
+
+            sen = [tok.replace(" ", "") for tok in sen]
+
             sentences.append((sen, []))
 
         return sentences
@@ -259,7 +262,7 @@ def ner(model_id):
 
     for (tokens, word_predictions),  (input_sentence, _) in zip(prediction, sentences):
 
-        original_text = "".join(input_sentence).replace(" ", "")
+        original_text = "".join(input_sentence)
         original_word_positions = \
             [pos for positions in [[idx] * len(word) for idx, word in enumerate(input_sentence)] for pos in positions]
 
@@ -302,7 +305,7 @@ def ner(model_id):
     for output_sentence, (input_sentence, _) in zip(output, sentences):
 
         try:
-            assert "".join([pred['word'] for pred in output_sentence]) == "".join(input_sentence).replace(" ", "")
+            assert "".join([pred['word'] for pred in output_sentence]) == "".join(input_sentence)
         except AssertionError:
             logger.warning('Input and output different!!! \n\n\nInput: {}\n\nOutput: {}\n'.
                            format("".join(input_sentence).replace(" ", ""),
