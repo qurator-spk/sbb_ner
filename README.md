@@ -44,7 +44,13 @@ Set USE_CUDA=False, if you do not have a GPU available/installed.
 
 For production purposes rather use
 ```
-gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
+env USE_CUDA=True/False gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
+```
+
+If you want to use a different model configuration file:
+
+```
+env USE_CUDA=True/False env CONFIG=`realpath ./my-config.json` gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
 ```
 
 # Docker
