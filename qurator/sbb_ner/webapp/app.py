@@ -18,7 +18,7 @@ from pytorch_pretrained_bert.modeling import (CONFIG_NAME,
 
 app = Flask(__name__)
 
-app.config.from_json('config.json')
+app.config.from_json('config.json' if not os.environ.get('CONFIG') else os.environ.get('CONFIG'))
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +161,7 @@ class PredictorStore:
         if self._model_id != model_id:
 
             self._predictor = NERPredictor(model_dir=model['model_dir'],
-                                           epoch=app.config['EPOCH'],
+                                           epoch=model['epoch'],
                                            batch_size=app.config['BATCH_SIZE'],
                                            no_cuda=False if not os.environ.get('USE_CUDA') else
                                            os.environ.get('USE_CUDA').lower() == 'false')
