@@ -119,7 +119,13 @@ class NERPredictor:
 
             prev_guid = fe.guid
 
-        assert len(sentences) == len(prediction)
+        try:
+            assert len(sentences) == len(prediction)
+        except AssertionError:
+            print('Sentences:\n')
+            print(sentences)
+            print('\n\nPrediciton:\n')
+            print(prediction)
 
         return prediction
 
@@ -141,6 +147,9 @@ class NERTokenizer:
         for sen in sentences_tokenized:
 
             sen = [tok.replace(" ", "") for tok in sen]
+
+            if len(sen) == 0:
+                continue
 
             sentences.append((sen, []))
 
