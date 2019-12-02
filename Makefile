@@ -199,8 +199,10 @@ $(BUILD_PATH)/bert-all-german-de-finetuned/$(EPOCH_FILE):
 	bert-ner --train_sets='GERM-EVAL-TRAIN|DE-CONLL-TRAIN' --dev_sets='GERM-EVAL-DEV|DE-CONLL-TESTA' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
 $(BUILD_PATH)/bert-complete-de-finetuned/$(EPOCH_FILE):
-	bert-ner --train_sets='GERM-EVAL-TRAIN|DE-CONLL-TRAIN|SBB|ONB|LFT|DE-CONLL-TESTA|DE-CONLL-TESTB|GERM-EVAL-TEST' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
+	bert-ner --train_sets='GERM-EVAL-TRAIN|GERM-EVAL-DEV|DE-CONLL-TRAIN|DE-CONLL-DEV|SBB|ONB|LFT|DE-CONLL-TESTA|DE-CONLL-TESTB|GERM-EVAL-TEST' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
+$(BUILD_PATH)/bert-multilang-de-finetuned/$(EPOCH_FILE):
+	bert-ner --train_sets='GERM-EVAL-DEV|GERM-EVAL-TEST|GERM-EVAL-TRAIN|SBB|ONB|LFT|BNF|KB|DE-CONLL-DEV|DE-CONLL-TESTA|DE-CONLL-TESTB|DE-CONLL-TRAIN|EN-CONLL-TESTA|EN-CONLL-TESTB|EN-CONLL-TRAIN' --bert_model=$(BERT_FINETUNED_PATH) --output_dir=$(@D) $(BERT_NER_OPTIONS) >> $(@D).log 2<&1
 
 
 $(BUILD_PATH)/bert-wikiner-de-finetuned/$(EPOCH_FILE):
