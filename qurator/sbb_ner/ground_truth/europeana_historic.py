@@ -61,7 +61,10 @@ def main(path_to_ner_corpora, ner_ground_truth_file):
 
     gt_all = read_gt(['{}/enp_DE.sbb.bio/enp_DE.sbb.bio'.format(path_to_ner_corpora),
                       '{}/enp_DE.onb.bio/enp_DE.onb.bio'.format(path_to_ner_corpora),
-                      '{}/enp_DE.lft.bio/enp_DE.lft.bio'.format(path_to_ner_corpora)], ['SBB', 'ONB', 'LFT'])
+                      '{}/enp_DE.lft.bio/enp_DE.lft.bio'.format(path_to_ner_corpora),
+                      '{}/enp_FR.bnf.bio/enp_FR.bnf.bio'.format(path_to_ner_corpora),
+                      '{}/enp_NL.kb.bio/enp_NL.kb.bio'.format(path_to_ner_corpora)],
+                     ['SBB', 'ONB', 'LFT', 'BNF', 'KB'])
 
     gt_all.to_pickle(ner_ground_truth_file)
 
