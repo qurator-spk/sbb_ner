@@ -58,7 +58,7 @@ function do_task(task, model_id, input_text) {
 
         $.ajax(
             {
-            url:  "/tokenized",
+            url:  "tokenized",
             data: JSON.stringify(post_data),
             type: 'POST',
             contentType: "application/json",
@@ -89,7 +89,7 @@ function do_task(task, model_id, input_text) {
         $("#resultregion").html(spinner_html)
 
         $.ajax({
-            url:  "/ner/" + model_id,
+            url:  "ner/" + model_id,
             data: JSON.stringify(post_data),
             type: 'POST',
             contentType: "application/json",
@@ -130,7 +130,7 @@ function do_task(task, model_id, input_text) {
 
         $.ajax(
             {
-            url:  "/ner-bert-tokens/" + model_id,
+            url:  "ner-bert-tokens/" + model_id,
             data: JSON.stringify(post_data),
             type: 'POST',
             contentType: "application/json",

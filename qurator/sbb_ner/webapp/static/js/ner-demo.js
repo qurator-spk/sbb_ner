@@ -8,7 +8,7 @@ $(document).ready(function(){
         }
     );
 
-    $.get( "/models")
+    $.get( "models")
         .done(
             function( data ) {
                 var tmp="";
