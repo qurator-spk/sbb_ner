@@ -236,6 +236,9 @@ def ner(model_id=None):
 
                 word += original_text[orig_pos]
 
+                if word_pred != 'X':
+                    last_prediction = word_pred
+
                 continue
 
             if not token.startswith('##') and word_pred == 'X':
