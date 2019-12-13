@@ -238,6 +238,9 @@ def ner(model_id=None):
 
                 continue
 
+            if not token.startswith('##') and word_pred == 'X':
+                word_pred = 'O'
+
             token = token[2:] if token.startswith('##') else token
 
             word += token
