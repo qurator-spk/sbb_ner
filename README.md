@@ -1,6 +1,6 @@
 ![sbb-ner-demo example](.screenshots/sbb_ner_demo.png?raw=true)
 
-How the models have been obtained: https://corpora.linguistik.uni-erlangen.de/data/konvens/proceedings/papers/KONVENS2019_paper_4.pdf .
+How the models have been obtained is described in our [paper](https://corpora.linguistik.uni-erlangen.de/data/konvens/proceedings/papers/KONVENS2019_paper_4.pdf).
 
 ***
 
