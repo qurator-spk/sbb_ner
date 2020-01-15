@@ -26,7 +26,7 @@ Install package together with its dependencies in development mode:
 pip install -e ./
 ```
 
-Download required models: https://file.spk-berlin.de:8443/sbb_ner/models.tar.gz 
+Download required models: https://qurator-data.de/sbb_ner/models.tar.gz 
 
 Extract model archive:
 ```
