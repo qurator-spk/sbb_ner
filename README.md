@@ -168,7 +168,7 @@ Output:
   ]
 ]
 ```
-The JSON above is the expected input format of the [SBB named entity disambiguation system](sbb_ned/).
+The JSON above is the expected input format of the [SBB named entity disambiguation system](/sbb_ned/).
 # Model-Training 
 
 ***
