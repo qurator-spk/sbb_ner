@@ -1,6 +1,8 @@
 import os
 import logging
 from flask import Flask, send_from_directory, redirect, jsonify, request
+from flask_caching import Cache
+from hashlib import sha256
 import html
 import json
 import torch
@@ -15,6 +17,8 @@ from pytorch_pretrained_bert.modeling import (CONFIG_NAME,
 app = Flask(__name__)
 
 app.config.from_json('config.json' if not os.environ.get('CONFIG') else os.environ.get('CONFIG'))
+
+cache = Cache(app)
 
 logger = logging.getLogger(__name__)
 
@@ -149,6 +153,10 @@ predictor_store = PredictorStore()
 tokenizer = NERTokenizer()
 
 
+def key_prefix():
+    return "{}:{}".format(request.path, sha256(str(request.json).encode('utf-8')).hexdigest())
+
+
 @app.route('/')
 def entry():
     return redirect("/index.html", code=302)
@@ -160,6 +168,7 @@ def get_models():
 
 
 @app.route('/tokenized', methods=['GET', 'POST'])
+@cache.cached(key_prefix=key_prefix)
 def tokenized():
 
     raw_text = request.json['text']
@@ -173,6 +182,7 @@ def tokenized():
 
 @app.route('/ner-bert-tokens', methods=['GET', 'POST'])
 @app.route('/ner-bert-tokens/<model_id>', methods=['GET', 'POST'])
+@cache.cached(key_prefix=key_prefix)
 def ner_bert_tokens(model_id=None):
 
     raw_text = request.json['text']
@@ -198,6 +208,7 @@ def ner_bert_tokens(model_id=None):
 
 @app.route('/ner', methods=['GET', 'POST'])
 @app.route('/ner/<model_id>', methods=['GET', 'POST'])
+@cache.cached(key_prefix=key_prefix)
 def ner(model_id=None):
 
     raw_text = request.json['text']
