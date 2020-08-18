@@ -14,5 +14,6 @@ cloudpickle
 pytest
 pytest-cov
 flask
+Flask-Caching
 gunicorn
 somajo
