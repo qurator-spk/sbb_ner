@@ -1,6 +1,6 @@
 numpy
 pandas
-dask==1.1.4
+dask==2021.10.0
 pyarrow==0.12.1
 tqdm
 pytorch-pretrained-bert==0.6.2
