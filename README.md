@@ -236,3 +236,24 @@ Perform BERT for NER supervised training and test/cross-validation.
 ```
 bert-ner --help
 ```
+
+### bert-pregenerate-trainingdata
+
+Generate data for BERT pre-training from a corpus text file where 
+the documents are separated by an empty line (output of corpuscollect).
+
+#### Usage
+
+```
+bert-pregenerate-trainingdata --help
+```
+
+### bert-finetune
+
+Perform BERT pre-training on pre-generated data.
+
+#### Usage
+
+```
+bert-finetune --help
+```
