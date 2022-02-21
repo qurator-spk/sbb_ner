@@ -17,3 +17,4 @@ flask
 Flask-Caching
 gunicorn
 somajo
+qurator-sbb-tools

@@ -25,7 +25,11 @@ setup(
         "compile_conll=qurator.sbb_ner.ground_truth.conll:main",
         "compile_wikiner=qurator.sbb_ner.ground_truth.wikiner:main",
         "join-gt=qurator.sbb_ner.ground_truth.join_gt:main",
-        "bert-ner=qurator.sbb_ner.models.bert:main"
+        "bert-ner=qurator.sbb_ner.models.bert:main",
+
+        "collectcorpus=qurator.sbb_ner.models.corpus:collect",
+        "bert-pregenerate-trainingdata=qurator.sbb_ner.models.pregenerate_training_data:main",
+        "bert-finetune=qurator.sbb_ner.models.finetune_on_pregenerated:main"
       ]
     },
     python_requires='>=3.6.0',
