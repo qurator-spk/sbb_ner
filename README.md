@@ -237,6 +237,37 @@ Perform BERT for NER supervised training and test/cross-validation.
 bert-ner --help
 ```
 
+## BERT-Pre-training:
+
+### collectcorpus
+
+```
+collectcorpus --help
+
+Usage: collectcorpus [OPTIONS] FULLTEXT_FILE SELECTION_FILE CORPUS_FILE
+
+  Reads the fulltext from a CSV or SQLITE3 file (see also altotool) and
+  write it to one big text file.
+
+  FULLTEXT_FILE: The CSV or SQLITE3 file to read from.
+
+  SELECTION_FILE: Consider only a subset of all pages that is defined by the
+  DataFrame that is stored in <selection_file>.
+
+  CORPUS_FILE: The output file that can be used by bert-pregenerate-trainingdata.
+
+Options:
+  --chunksize INTEGER     Process the corpus in chunks of <chunksize>.
+                          default:10**4
+
+  --processes INTEGER     Number of parallel processes. default: 6
+  --min-line-len INTEGER  Lower bound of line length in output file.
+                          default:80
+
+  --help                  Show this message and exit.
+
+```
+
 ### bert-pregenerate-trainingdata
 
 Generate data for BERT pre-training from a corpus text file where 
