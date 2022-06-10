@@ -1,7 +1,5 @@
 numpy
 pandas
-dask==1.1.4
-pyarrow==0.12.1
 tqdm
 pytorch-pretrained-bert==0.6.2
 sklearn
@@ -17,4 +15,4 @@ flask
 Flask-Caching
 gunicorn
 somajo
-qurator-sbb-tools
+qurator-sbb-utils
