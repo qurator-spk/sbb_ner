@@ -132,7 +132,6 @@ The general observation that historical texts often remain silent and avoid nami
 
 <!-- This should link to a Data Card, perhaps with a short stub of information on what the training data is all about as well as documentation related to data pre-processing or additional filtering. -->
 
-Three datasets were used: 
 1) CoNLL 2003 German Named Entity Recognition Ground Truth (Tjong Kim Sang and De Meulder, 2003)
 2) GermEval Konvens 2014 Shared Task Data (Benikova et al., 2014)
 3) DC-SBB Digital Collections of the Berlin State Library (Labusch and Zellhöfer, 2019)
