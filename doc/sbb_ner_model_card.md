@@ -133,7 +133,7 @@ Three datasets were used:
 1) CoNLL 2003 German Named Entity Recognition Ground Truth (Tjong Kim Sang and De Meulder, 2003)
 2) GermEval Konvens 2014 Shared Task Data (Benikova et al., 2014)
 3) DC-SBB Digital Collections of the Berlin State Library (Labusch and Zellhöfer, 2019)
-
+4) Europeana Newspapers Historic German Datasets (Neudecker, 2016)
 
 
 ## Training Procedure
