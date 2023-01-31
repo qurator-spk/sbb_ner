@@ -87,11 +87,11 @@ It predicts the classes PER, LOC and ORG.
 
 ## Direct Use
 
+The model can directly be used to perform NER on historical german texts obtained by OCR from digitized documents.
+Supported entity types are PER, LOC and ORG. 
+
 <!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
 <!-- If the user enters content, print that. If not, but they enter a task in the list, use that. If neither, say "more info needed." -->
-
-
-
 
 ## Downstream Use [Optional]
 
@@ -181,6 +181,7 @@ The evaluation focuses on NER in historical germans documents, see publication f
 <!-- These are the evaluation metrics being used, ideally with a description of why. -->
 
 Performance metrics used in evaluation is precision, recall and F1-score.
+See paper for actual results in terms of these metrics.
 
 ## Results 
 
@@ -196,7 +197,7 @@ See publication.
 
 Carbon emissions can be estimated using the [Machine Learning Impact calculator](https://mlco2.github.io/impact#compute) presented in [Lacoste et al. (2019)](https://arxiv.org/abs/1910.09700).
 
-- **Hardware Type:** V1 
+- **Hardware Type:** V100
 - **Hours used:** Roughly 1-2 week(s) for pretraining. Roughly 1 hour for final NER-training.
 - **Cloud Provider:** No cloud.
 - **Compute Region:** Germany.
