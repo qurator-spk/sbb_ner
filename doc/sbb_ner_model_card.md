@@ -93,7 +93,10 @@ Supported entity types are PER, LOC and ORG.
 <!-- This section is for the model use without fine-tuning or plugging into a larger ecosystem/app. -->
 <!-- If the user enters content, print that. If not, but they enter a task in the list, use that. If neither, say "more info needed." -->
 
-## Downstream Use [Optional]
+## Downstream Use
+
+The model has been pre-trained on 2.300.000 pages of OCR-text of the digitized collections of Berlin State Library.
+Therefore it is adapted to OCR-error prone historical german texts and might be used for particular applications that involve such text material.
 
 <!-- This section is for the model use when fine-tuned for a task, or when plugged into a larger ecosystem/app -->
 <!-- If the user enters content, print that. If not, but they enter a task in the list, use that. If neither, say "more info needed." -->
