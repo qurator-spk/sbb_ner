@@ -28,7 +28,6 @@ Questions and comments about the model can be directed to Clemens Neudecker at c
 
 - [Model Card for sbb_ner](#model-card-for--model_id-)
 - [Table of Contents](#table-of-contents)
-- [Table of Contents](#table-of-contents-1)
 - [Model Details](#model-details)
   - [Model Description](#model-description)
 - [Uses](#uses)
@@ -71,12 +70,12 @@ Questions and comments about the model can be directed to Clemens Neudecker at c
 A BERT model trained on three German corpora containing contemporary and historical texts for named entity recognition tasks. 
 It predicts the classes PER, LOC and ORG. 
 
-- **Developed by:** [Kai Labusch](https://huggingface.co/labusch), [Clemens Neudecker](https://huggingface.co/cneud), David Zellhöfer
-- **Shared by [Optional]:** [Staatsbibliothek zu Berlin / Berlin State Library] (https://huggingface.co/SBB)
+- **Developed by:** [Kai Labusch](kai.labusch@sbb.spk-berlin.de), [Clemens Neudecker](clemens.neudecker@sbb.spk-berlin.de), David Zellhöfer
+- **Shared by [Optional]:** Staatsbibliothek zu Berlin / Berlin State Library
 - **Model type:** Language model
 - **Language(s) (NLP):** de
 - **License:** apache-2.0
-- **Parent Model:** The BERT base multilingual cased model as provided by [Google] (https://huggingface.co/bert-base-multilingual-cased)
+- **Parent Model:** The BERT base multilingual cased model as provided by [Google](https://huggingface.co/bert-base-multilingual-cased)
 - **Resources for more information:** More information needed
     - [GitHub Repo](https://github.com/qurator-spk/sbb_ner)
     - [Associated Paper](https://konvens.org/proceedings/2019/papers/KONVENS2019_paper_4.pdf)
@@ -258,8 +257,8 @@ More information needed
 
 <!-- This section provides another layer of transparency and accountability. Whose views is this model card representing? How many voices were included in its construction? Etc. -->
 
-Kai Labusch (kai.labusch@sbb.spk-berlin.de)
-[Jörg Lehmann](https://huggingface.co/Jrglmn)
+[Kai Labusch](kai.labusch@sbb.spk-berlin.de) and [Jörg Lehmann](joerg.lehmann@sbb.spk-berlin.de)
+
 
 # Model Card Contact
 
