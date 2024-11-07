@@ -388,6 +388,9 @@ def convert_examples_to_features(example, label_map, max_seq_len, tokenizer):
     for i, word in enumerate(example.text_a):  # example.text_a is a sequence of words
 
         token = tokenizer.tokenize(word)
+
+        # import ipdb;ipdb.set_trace()
+
         tokens.extend(token)
 
         label_1 = example.label[i] if i < len(example.label) else 'O'
