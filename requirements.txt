@@ -2,7 +2,7 @@ numpy
 pandas
 tqdm
 pytorch-pretrained-bert==0.6.2
-sklearn
+scikit-learn
 click
 langid
 seqeval
