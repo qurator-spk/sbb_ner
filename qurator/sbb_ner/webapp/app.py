@@ -253,7 +253,8 @@ def ner(model_id=None):
                 orig_pos = len(output_text + word)
 
                 # are we on a word boundary?
-                if orig_pos > 0 and original_word_positions[orig_pos-1] != original_word_positions[orig_pos]:
+                if len(word) > 0 and orig_pos > 0 \
+                        and original_word_positions[orig_pos-1] != original_word_positions[orig_pos]:
 
                     # we are on a word boundary - start a new word ...
                     output_sentence.append({'word': word, 'prediction': word_prediction})
