@@ -268,7 +268,7 @@ def ner(model_id=None):
             else:
                 token = token[2:] if token.startswith('##') else token
 
-            # if the output_text plus the current word and token is not a prefix of the original text, it means,
+            # if the output_text plus the current word and token is not a prefix of the original text, it means, that
             # we would miss characters. Therefore we take the missing characters from the original text at the current
             # word position
             while not original_text.startswith(output_text + word + token) \
