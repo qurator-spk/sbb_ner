@@ -1,5 +1,5 @@
 from io import open
-from setuptools import find_packages, setup
+from setuptools import find_namespace_packages, setup
 
 with open('requirements.txt') as fp:
     install_requires = fp.read()
@@ -15,8 +15,7 @@ setup(
     keywords='qurator',
     license='Apache',
     url="https://qurator.ai",
-    packages=find_packages(exclude=["*.tests", "*.tests.*",
-                                    "tests.*", "tests"]),
+    packages=find_namespace_packages(include=['qurator']),
     install_requires=install_requires,
     entry_points={
       'console_scripts': [
