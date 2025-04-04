@@ -16,8 +16,9 @@ from pytorch_pretrained_bert.modeling import (CONFIG_NAME,
                                               BertForTokenClassification)
 app = Flask(__name__)
 
-app.config.from_json('config.json' if not os.environ.get('CONFIG') else os.environ.get('CONFIG'))
-
+app.config.from_file(os.path.join(os.getcwd(),
+                                  'config.json' if not os.environ.get('CONFIG')
+                                  else os.environ.get('CONFIG')), load=json.load)
 cache = Cache(app)
 
 logger = logging.getLogger(__name__)
