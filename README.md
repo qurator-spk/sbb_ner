@@ -6,26 +6,26 @@ How the models have been obtained is described in our [paper](https://corpora.li
 
 # Installation:
 
-Setup virtual environment:
-```
-virtualenv --python=python3.6 venv
-```
+Recommended python version is 3.11. 
+Consider use of [pyenv](https://github.com/pyenv/pyenv) if that python version is not available on your system. 
 
-Activate virtual environment:
+Activate virtual environment (virtualenv):
 ```
 source venv/bin/activate
 ```
+or (pyenv):
+```
+pyenv activate my-python-3.11-virtualenv
+```
 
-Upgrade pip:
+Update pip:
 ```
 pip install -U pip
 ```
-
-Install package together with its dependencies in development mode:
+Install sbb_images:
 ```
-pip install -e ./
+pip install git+https://github.com/qurator-spk/sbb_ner.git
 ```
-
 Download required models: https://qurator-data.de/sbb_ner/models.tar.gz 
 
 Extract model archive:
