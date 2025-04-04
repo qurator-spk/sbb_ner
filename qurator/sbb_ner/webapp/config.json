@@ -28,6 +28,13 @@
       "model_dir": "data/konvens2019/build-wd_0.03/bert-all-german-baseline",
       "epoch": 7,
       "default": false
+    },
+    {
+      "name": "MULTILANG",
+      "id": 5,
+      "model_dir": "data/BERT/build-wd_0.03/bert-multilang-de-finetuned",
+      "epoch": 20,
+      "default": false
     }
   ]
 }

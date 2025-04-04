@@ -520,3 +520,12 @@ wikipedia-evaluation3: $(BUILD_PATH)/wikipedia-de-finetuned/eval_results-DE-CONL
 
 model_archive:
 	tar --exclude='*ep[1-6]*' --exclude='*eval*' --exclude='pytorch_model.bin' --exclude='*.pkl' -chzf models.tar.gz data/konvens2019/build-wd_0.03/bert-all-german-de-finetuned data/konvens2019/build-on-all-german-de-finetuned/bert-sbb-de-finetuned data/konvens2019/build-wd_0.03/bert-sbb-de-finetuned data/konvens2019/build-wd_0.03/bert-all-german-baseline
+
+models_from_git_annex:
+	cd data;git annex get konvens2019/build-wd_0.03/bert-all-german-de-finetuned
+	cd data;git annex get konvens2019/build-on-all-german-de-finetuned/bert-sbb-de-finetuned
+	cd data;git annex get konvens2019/build-wd_0.03/bert-sbb-de-finetuned
+	cd data;git annex get konvens2019/build-wd_0.03/bert-all-german-baseline
+
+	
+

@@ -15,4 +15,5 @@ flask
 Flask-Caching
 gunicorn
 somajo
-qurator-sbb-utils
+qurator-sbb-utils @ git+https://github.com/qurator-spk/sbb_utils.git
+qurator-sbb-tools @ git+https://github.com/qurator-spk/sbb_tool.git
