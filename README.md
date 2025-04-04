@@ -33,24 +33,18 @@ Extract model archive:
 tar -xzf models.tar.gz
 ```
 
+Copy [config file](qurator/sbb_ner/webapp/config.json) into working directory.
+Set USE_CUDA environment variable to True/False depending on GPU availability.
+
 Run webapp directly:
 
 ```
-env FLASK_APP=qurator/sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=True flask run --host=0.0.0.0
+env CONFIG=config.json env FLASK_APP=qurator/sbb_ner/webapp/app.py env FLASK_ENV=development env USE_CUDA=True/False flask run --host=0.0.0.0
 ```
-
-Set USE_CUDA=False, if you do not have a GPU available/installed.
-
 
 For production purposes rather use
 ```
-env USE_CUDA=True/False gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
-```
-
-If you want to use a different model configuration file:
-
-```
-env USE_CUDA=True/False env CONFIG=`realpath ./my-config.json` gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
+env CONFIG=config.json env USE_CUDA=True/False gunicorn --bind 0.0.0.0:5000 qurator.sbb_ner.webapp.wsgi:app
 ```
 
 # Docker
@@ -68,7 +62,6 @@ docker run -ti --rm=true --mount type=bind,source=data/konvens2019,target=/usr/s
 ## GPU:
 
 Make sure that your GPU is correctly set up and that nvidia-docker has been installed.
-
 
 ```
 docker build --build-arg http_proxy=$http_proxy  -t qurator/webapp-ner-gpu -f Dockerfile .
