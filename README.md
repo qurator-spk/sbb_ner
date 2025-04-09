@@ -22,7 +22,7 @@ Update pip:
 ```
 pip install -U pip
 ```
-Install sbb_images:
+Install sbb_ner:
 ```
 pip install git+https://github.com/qurator-spk/sbb_ner.git
 ```
