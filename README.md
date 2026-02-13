@@ -26,7 +26,7 @@ Install sbb_ner:
 ```
 pip install git+https://github.com/qurator-spk/sbb_ner.git
 ```
-Download required models: https://qurator-data.de/sbb_ner/models.tar.gz 
+Download required models: https://zenodo.org/records/18634575. 
 
 Extract model archive:
 ```
