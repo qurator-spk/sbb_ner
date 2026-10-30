@@ -1,19 +1,21 @@
-numpy
-pandas
-tqdm
+click==8.1.8
+conlleval==0.2
+Flask==3.1.0
+Flask-Caching==2.3.1
+gunicorn==23.0.0
+joblib==1.4.2
+langid==1.1.6
+numpy==2.2.4
+pandas==2.2.3
+pytest==8.3.5
+pytest-cov==6.1.0
 pytorch-pretrained-bert==0.6.2
-scikit-learn
-click
-langid
-seqeval
-conlleval
-toolz
-cloudpickle
-pytest
-pytest-cov
-flask
-Flask-Caching
-gunicorn
-somajo
-qurator-sbb-utils @ git+https://github.com/qurator-spk/sbb_utils.git
-qurator-sbb-tools @ git+https://github.com/qurator-spk/sbb_tools.git
+qurator-sbb-tools @ git+https://github.com/qurator-spk/sbb_tools.git@97569b75ea4502c8cea082821f4fdd7fe25b779d
+qurator-sbb-utils @ git+https://github.com/qurator-spk/sbb_utils.git@dc0f06f9d8dda65891fcdefb03d55e9462cc026d
+requests==2.32.3
+scikit-learn==1.6.1
+scipy==1.15.2
+seqeval==1.2.2
+SoMaJo==2.4.3
+torch==2.6.0
+tqdm==4.67.1
