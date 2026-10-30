@@ -7,7 +7,7 @@ joblib==1.4.2
 langid==1.1.6
 numpy==2.2.4
 pandas==2.2.3
-pytest==8.3.5
+pytest==9.0.3
 pytest-cov==6.1.0
 pytorch-pretrained-bert==0.6.2
 qurator-sbb-tools @ git+https://github.com/qurator-spk/sbb_tools.git
