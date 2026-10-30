@@ -8,7 +8,6 @@ import sqlite3
 
 from qurator.utils.parallel import run as prun
 
-
 class ChunkTask:
 
     selection = None
