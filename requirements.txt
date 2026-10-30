@@ -17,5 +17,5 @@ scikit-learn==1.6.1
 scipy==1.15.2
 seqeval==1.2.2
 SoMaJo==2.4.3
-torch==2.6.0
+torch==2.13.0
 tqdm==4.67.1
