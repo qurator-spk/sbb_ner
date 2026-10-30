@@ -36,9 +36,6 @@ collectcorpus                 = "qurator.sbb_ner.models.corpus:collect"
 bert-pregenerate-trainingdata = "qurator.sbb_ner.models.pregenerate_training_data:main"
 bert-finetune                 = "qurator.sbb_ner.models.finetune_on_pregenerated:main"
 
-[tool.setuptools]
-editable-mode = "compat"
-
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 optional-dependencies.DEVEL = {file = ["requirements-devel.txt"]}
